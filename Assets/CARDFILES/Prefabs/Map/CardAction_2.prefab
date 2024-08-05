@@ -484,6 +484,7 @@ GameObject:
   - component: {fileID: 4180490966667713304}
   - component: {fileID: 6359427701655458439}
   - component: {fileID: 2745317859966405289}
+  - component: {fileID: 410692690065411382}
   m_Layer: 5
   m_Name: CardAction_2
   m_TagString: Untagged
@@ -567,6 +568,21 @@ MonoBehaviour:
   thisRectTransform: {fileID: 2734417948977455999}
   thisAreaRaycast: {fileID: 6359427701655458439}
   parentContener: {fileID: 0}
+--- !u!114 &410692690065411382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6871861876746667242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed3bb52b82cee6459f5dc10e51a7ad6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameCard: {fileID: 376073561600702620}
+  staff: {fileID: 2720309259999896266}
+  cost: {fileID: 643811426289037962}
 --- !u!1 &6903764975676510866
 GameObject:
   m_ObjectHideFlags: 0

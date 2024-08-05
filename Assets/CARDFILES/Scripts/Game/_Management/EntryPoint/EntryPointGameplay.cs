@@ -15,7 +15,7 @@ namespace Game.Management
 
         [Space, SerializeField] private PartView partView;
         [SerializeField] private MapView mapView;
-        [SerializeField] private CardsView cardsView;
+        [SerializeField] private DeckCardView cardsView;
 
         [Space, SerializeField] private HistorySO data;
 

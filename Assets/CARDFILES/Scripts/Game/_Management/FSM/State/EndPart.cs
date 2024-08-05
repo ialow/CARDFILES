@@ -9,12 +9,15 @@ namespace Game.Management
         private readonly FSMGameplay fsm;
         private readonly HistorySO data;
 
+        private readonly Company company;
         private readonly MapView mapView;
 
-        public EndPart(FSMGameplay fsm, HistorySO data, MapView mapView) 
+        public EndPart(FSMGameplay fsm, HistorySO data, Company company, MapView mapView) 
         {
             this.fsm = fsm;
             this.data = data;
+
+            this.company = company;
 
             this.mapView = mapView;
         }
@@ -25,7 +28,7 @@ namespace Game.Management
 
         public void Enter(int numberPart)
         {
-            mapView.EndPartInfoView();
+            mapView.EndPartInfoView(company);
 
             if (numberPart < data.Events.Count)
             {

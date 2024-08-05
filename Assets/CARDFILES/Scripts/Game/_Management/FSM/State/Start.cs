@@ -26,7 +26,7 @@ namespace Game.Management
         public void Enter()
         {
             partView.StartInfoView();
-            mapView.StartInfoView();
+            mapView.StartInfoView(company);
             fsm.EnterIn(StateGameplay.Part);
         }
 

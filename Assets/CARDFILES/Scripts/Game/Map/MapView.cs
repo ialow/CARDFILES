@@ -1,3 +1,5 @@
+using Game.Data;
+using Game.View;
 using UnityEngine;
 
 public class MapView : MonoBehaviour
@@ -37,28 +39,30 @@ public class MapView : MonoBehaviour
         return transformObj;
     }
 
-    public void StartInfoView()
+    public void StartInfoView(Company data)
     {
-        // данные
-        var transformStartInfo = InfoView(startInfoPrefab);
+        var startInfo = InfoView(startInfoPrefab).GetComponent<StartInfoView>();
+        startInfo.UIView(data);
     }
 
-    public void EndPartInfoView()
+    public void EndPartInfoView(Company data)
     {
-        // данные
-        InfoView(endPartPrefab);
+        var partInfo = InfoView(endPartPrefab).GetComponent<PartInfoView>();
+        partInfo.UIView(data);
     }
 
-    public void EventView()
+    public void EventView(EventData data)
     {
-        var transformEvent = Instantiate(eventPrefab, contentTransform).GetComponent<RectTransform>();
+        var historyEvent = Instantiate(eventPrefab, contentTransform);
+        var rectTransformHistoryEvent = historyEvent.GetComponent<RectTransform>();
+        historyEvent.GetComponent<EventView>().UIView(data);
 
-        var posX = pointReference.localPosition.x - transformEvent.rect.width / 2 - contentAreaWidth * horizontalDistanceBetweenObj;
-        var posY = objectMinPositionY - contentAreaHeight * verticalDistanceBetweenObj - transformEvent.rect.height / 2;
+        var posX = pointReference.localPosition.x - rectTransformHistoryEvent.rect.width / 2 - contentAreaWidth * horizontalDistanceBetweenObj;
+        var posY = objectMinPositionY - contentAreaHeight * verticalDistanceBetweenObj - rectTransformHistoryEvent.rect.height / 2;
 
-        transformEvent.anchoredPosition = new Vector2(posX, posY);
+        rectTransformHistoryEvent.anchoredPosition = new Vector2(posX, posY);
 
-        ObjectMinPositionY(transformEvent);
+        ObjectMinPositionY(rectTransformHistoryEvent);
     }
 
     public void ObjectMinPositionY(RectTransform transformObj)

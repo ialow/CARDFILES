@@ -22,10 +22,10 @@ namespace Game.Management
 
         private readonly MapView mapView;
         private readonly PartView partView;
-        private readonly CardsView cardsView;
+        private readonly DeckCardView cardsView;
 
         public Part(FSMGameplay fsm, Coroutines coroutines, HistorySO data, Company company, 
-            MapView mapView, PartView partView, CardsView cardsView) 
+            MapView mapView, PartView partView, DeckCardView cardsView) 
         {
             this.fsm = fsm;
             this.coroutines = coroutines;
@@ -48,8 +48,10 @@ namespace Game.Management
             AddHistoryEvent();
 
             partView.NumberPartView(numberPart + 1);
-            mapView.EventView(); // data о ивенте
-            cardsView.CardsObj(data.Events[numberPart].CardsAction);
+            mapView.EventView(data.Events[numberPart]);
+            cardsView.CardsObj(data.Events[numberPart].CardsAction, AddActionEvent);
+
+            // метод добавления action картам
 
             coroutines.StartCoroutine(TimerPart(/*GameSettings.TIME_PART*/5f));
         }
@@ -114,6 +116,11 @@ namespace Game.Management
                     eventsByTime.Add((timeMark, () => company.MoneyChanged(parameters)));
                 }
             }
+        }
+
+        private void AddActionEvent(string i)
+        {
+            Debug.Log($"использование картый действия - {i}");
         }
     }
 }

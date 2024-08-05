@@ -12,8 +12,10 @@ namespace Game.Component
         {
             var dropped = eventData.pointerDrag;
             var draggableItem = dropped.GetComponent<DraggableObject>();
+            var actionItem = dropped.GetComponent<CardAction>();
 
             draggableItem.Inactive().SetParent(contentTransform);
+            actionItem.UsrCardAction();
 
             mapView.ObjectMinPositionY(dropped.GetComponent<RectTransform>());
         }
