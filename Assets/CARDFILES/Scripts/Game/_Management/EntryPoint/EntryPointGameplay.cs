@@ -15,7 +15,7 @@ namespace Game.Management
 
         [Space, SerializeField] private PartView partView;
         [SerializeField] private MapView mapView;
-        [SerializeField] private DeckCardView cardsView;
+        [SerializeField] private DeckCard cardsView;
 
         [Space, SerializeField] private HistorySO data;
 
@@ -26,12 +26,5 @@ namespace Game.Management
             FSM = new FSMGameplay().Init(inputSystem, partView, data, mapNavigations, mapView, cardsView);
             FSM.EnterIn(StateGameplay.Init);
         }
-
-        //public void Update()
-        //{
-        //    //Debug.Log(ñompany.Assets[0].PromotionNValue + " GAME");
-        //    //Debug.Log(data.Company.AssetsData[0].PromotionNValue + " DATA");
-        //    //ñompany.Assets[0].ChangePromotionNValue(0.1111f);
-        //}
     }
 }

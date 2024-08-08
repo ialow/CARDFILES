@@ -15,9 +15,10 @@ namespace Game.Component
             var actionItem = dropped.GetComponent<CardAction>();
 
             draggableItem.Inactive().SetParent(contentTransform);
-            actionItem.UsrCardAction();
+            actionItem.UseCard();
 
-            mapView.ObjectMinPositionY(dropped.GetComponent<RectTransform>());
+            mapView.ObjectBoundaryPoints(dropped.GetComponent<RectTransform>());
+            mapView.AutoexpansionMap(dropped.GetComponent<RectTransform>()); //
         }
     }
 }

@@ -1,13 +1,21 @@
+using UnityEngine;
+
+using Game.Component;
 using Game.Data;
 using Game.View;
-using UnityEngine;
 
 public class MapView : MonoBehaviour
 {
     private float contentAreaWidth;
     private float contentAreaHeight;
 
-    private float objectMinPositionY;
+    private float objectMinPointX;
+    private float objectMaxPointX;
+    private float objectMinPointY;
+    private float objectMaxPointY;
+
+    [Space, SerializeField] private int resolutionPixelImage = 512;
+    [SerializeField] private Vector4 gridChildImages = new Vector4(1, 1, 1, 1);
 
     [SerializeField] private RectTransform contentTransform;
 
@@ -15,17 +23,19 @@ public class MapView : MonoBehaviour
     [SerializeField, Range(0f, 0.01f)] private float horizontalDistanceBetweenObj = 0.005f;
     [SerializeField, Range(0f, 0.5f)] private float verticalDistanceBetweenObj = 0.1f;
 
+    [Space, SerializeField] private RectTransform parentBackgorund;
+    [SerializeField] private GameObject gridPrefab;
+
     [Space, SerializeField] private GameObject startInfoPrefab;
     [SerializeField] private GameObject endPartPrefab;
     [SerializeField] private GameObject eventPrefab;
-
 
     public void Init()
     {
         contentAreaWidth = contentTransform.rect.width;
         contentAreaHeight = contentTransform.rect.height;
 
-        objectMinPositionY = pointReference.localPosition.y + verticalDistanceBetweenObj * contentAreaHeight;
+        objectMinPointY = pointReference.localPosition.y + verticalDistanceBetweenObj * contentAreaHeight;
     }
 
     private RectTransform InfoView(GameObject prefab)
@@ -33,7 +43,7 @@ public class MapView : MonoBehaviour
         var transformObj = Instantiate(prefab, contentTransform).GetComponent<RectTransform>();
 
         var posX = pointReference.localPosition.x + transformObj.rect.width / 2 + contentAreaWidth * horizontalDistanceBetweenObj;
-        var posY = objectMinPositionY - contentAreaHeight * verticalDistanceBetweenObj - transformObj.rect.height / 2;
+        var posY = objectMinPointY - contentAreaHeight * verticalDistanceBetweenObj - transformObj.rect.height / 2;
 
         transformObj.anchoredPosition = new Vector2(posX, posY);
         return transformObj;
@@ -58,18 +68,65 @@ public class MapView : MonoBehaviour
         historyEvent.GetComponent<EventView>().UIView(data);
 
         var posX = pointReference.localPosition.x - rectTransformHistoryEvent.rect.width / 2 - contentAreaWidth * horizontalDistanceBetweenObj;
-        var posY = objectMinPositionY - contentAreaHeight * verticalDistanceBetweenObj - rectTransformHistoryEvent.rect.height / 2;
+        var posY = objectMinPointY - contentAreaHeight * verticalDistanceBetweenObj - rectTransformHistoryEvent.rect.height / 2;
 
         rectTransformHistoryEvent.anchoredPosition = new Vector2(posX, posY);
 
-        ObjectMinPositionY(rectTransformHistoryEvent);
+        ObjectBoundaryPoints(rectTransformHistoryEvent);
     }
 
-    public void ObjectMinPositionY(RectTransform transformObj)
+    public void ObjectBoundaryPoints(RectTransform transformObj)
     {
-        var possiblePosition = transformObj.localPosition.y - transformObj.rect.height / 2;
+        var possiblePositionMinY = transformObj.localPosition.y - transformObj.rect.height / 2;
+        if (possiblePositionMinY < objectMinPointY)
+            objectMinPointY = possiblePositionMinY;
 
-        if (possiblePosition < objectMinPositionY)
-            objectMinPositionY = possiblePosition;
+        //var possiblePositionMaxY = transformObj.localPosition.y + transformObj.rect.height / 2;
+        //if (possiblePositionMaxY > objectMaxPointY)
+        //    objectMaxPointY = possiblePositionMaxY;
+
+        //var possiblePositionMinX = transformObj.localPosition.x - transformObj.rect.width / 2;
+        //if (possiblePositionMinX < objectMinPointX)
+        //    objectMinPointX = possiblePositionMinX;
+
+        //var possiblePositionMaxX = transformObj.localPosition.x + transformObj.rect.width / 2;
+        //if (possiblePositionMaxX > objectMaxPointX)
+        //    objectMaxPointX = possiblePositionMaxX;
+    }
+
+    public void AutoexpansionMap(RectTransform transformObj)
+    {
+        var sizeMapMinX = gridChildImages.x;
+        var sizeMapMaxX = gridChildImages.y;
+        var sizeMapMinY = gridChildImages.z;
+        var sizeMapMaxY = gridChildImages.w;
+
+        // -y
+        var availableAreaY = resolutionPixelImage * sizeMapMinY;
+        var distanceToEndMapMinY = -availableAreaY - objectMinPointY;
+
+        if (distanceToEndMapMinY < resolutionPixelImage)
+        {
+            var posMinY = sizeMapMinY * -resolutionPixelImage - 512;
+            var posMinX = sizeMapMinX * -resolutionPixelImage;
+
+            var sizeMapX = sizeMapMinX + sizeMapMaxX + 1;
+            for (var i = 0; i < 3; i++)
+            {
+                InstantiateElementGrid(posMinX, posMinY);
+                posMinX += resolutionPixelImage;
+            }
+
+            gridChildImages = new Vector4(sizeMapMinX, sizeMapMaxX, sizeMapMinY + 1, sizeMapMaxY);
+        }
+
+        // -x
+
+    }
+
+    private void InstantiateElementGrid(float posX, float posY)
+    {
+        var rectTransform = Instantiate(gridPrefab, parentBackgorund).GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = new Vector2(posX, posY);
     }
 }

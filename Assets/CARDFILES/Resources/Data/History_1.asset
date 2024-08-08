@@ -77,7 +77,7 @@ MonoBehaviour:
         \u0432\u0435\u0440\u0438\u0444\u0438\u0446\u0438\u0440\u043E\u0432\u0430\u043D\u044B."
       <Cost>k__BackingField: 10
       <NumberEmployees>k__BackingField: 2
-      <DurationAction>k__BackingField: 0
+      <DurationActionNValue>k__BackingField: 0.1
       <TypeAction>k__BackingField: 0
       <ChangeParameters>k__BackingField:
       - 60
@@ -96,7 +96,7 @@ MonoBehaviour:
         \u0432\u0435\u0440\u0438\u0444\u0438\u0446\u0438\u0440\u043E\u0432\u0430\u043D\u044B."
       <Cost>k__BackingField: 10
       <NumberEmployees>k__BackingField: 2
-      <DurationAction>k__BackingField: 0
+      <DurationActionNValue>k__BackingField: 0
       <TypeAction>k__BackingField: 0
       <ChangeParameters>k__BackingField:
       - 60
@@ -115,7 +115,7 @@ MonoBehaviour:
         \u0432\u0435\u0440\u0438\u0444\u0438\u0446\u0438\u0440\u043E\u0432\u0430\u043D\u044B."
       <Cost>k__BackingField: 10
       <NumberEmployees>k__BackingField: 2
-      <DurationAction>k__BackingField: 0
+      <DurationActionNValue>k__BackingField: 0
       <TypeAction>k__BackingField: 0
       <ChangeParameters>k__BackingField:
       - 60
@@ -134,7 +134,7 @@ MonoBehaviour:
         \u0432\u0435\u0440\u0438\u0444\u0438\u0446\u0438\u0440\u043E\u0432\u0430\u043D\u044B."
       <Cost>k__BackingField: 10
       <NumberEmployees>k__BackingField: 2
-      <DurationAction>k__BackingField: 0
+      <DurationActionNValue>k__BackingField: 0
       <TypeAction>k__BackingField: 0
       <ChangeParameters>k__BackingField:
       - 60
@@ -153,7 +153,7 @@ MonoBehaviour:
         \u0432\u0435\u0440\u0438\u0444\u0438\u0446\u0438\u0440\u043E\u0432\u0430\u043D\u044B."
       <Cost>k__BackingField: 10
       <NumberEmployees>k__BackingField: 2
-      <DurationAction>k__BackingField: 0
+      <DurationActionNValue>k__BackingField: 0
       <TypeAction>k__BackingField: 0
       <ChangeParameters>k__BackingField:
       - 60
@@ -170,12 +170,12 @@ MonoBehaviour:
         \u0441\u043E\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445 \u0441\u043E\u0446\u0438\u0430\u043B\u044C\u043D\u044B\u0445
         \u0440\u0435\u0437\u0435\u0440\u0432\u043E\u0432 \u0441\u0432\u043E\u0435\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E
         \u0432\u0435\u0440\u0438\u0444\u0438\u0446\u0438\u0440\u043E\u0432\u0430\u043D\u044B."
-      <Cost>k__BackingField: 10
+      <Cost>k__BackingField: 50
       <NumberEmployees>k__BackingField: 2
-      <DurationAction>k__BackingField: 0
+      <DurationActionNValue>k__BackingField: 0
       <TypeAction>k__BackingField: 0
       <ChangeParameters>k__BackingField:
-      - 60
+      - 10
     - <Name>k__BackingField: "\u041A\u0410\u0420\u0422\u0410 \u0414\u0415\u0414\u0419\u0421\u0422\u0412\u0418\u042F
         VII"
       <Description>k__BackingField: "\u0412 \u0440\u0430\u043C\u043A\u0430\u0445
@@ -189,12 +189,12 @@ MonoBehaviour:
         \u0441\u043E\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445 \u0441\u043E\u0446\u0438\u0430\u043B\u044C\u043D\u044B\u0445
         \u0440\u0435\u0437\u0435\u0440\u0432\u043E\u0432 \u0441\u0432\u043E\u0435\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E
         \u0432\u0435\u0440\u0438\u0444\u0438\u0446\u0438\u0440\u043E\u0432\u0430\u043D\u044B."
-      <Cost>k__BackingField: 10
+      <Cost>k__BackingField: 100
       <NumberEmployees>k__BackingField: 2
-      <DurationAction>k__BackingField: 0
+      <DurationActionNValue>k__BackingField: 0.3
       <TypeAction>k__BackingField: 0
       <ChangeParameters>k__BackingField:
-      - 60
+      - 20
     - <Name>k__BackingField: "\u041A\u0410\u0420\u0422\u0410 \u0414\u0415\u0414\u0419\u0421\u0422\u0412\u0418\u042F
         VIII"
       <Description>k__BackingField: "\u0412 \u0440\u0430\u043C\u043A\u0430\u0445
@@ -208,9 +208,9 @@ MonoBehaviour:
         \u0441\u043E\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0445 \u0441\u043E\u0446\u0438\u0430\u043B\u044C\u043D\u044B\u0445
         \u0440\u0435\u0437\u0435\u0440\u0432\u043E\u0432 \u0441\u0432\u043E\u0435\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u043E
         \u0432\u0435\u0440\u0438\u0444\u0438\u0446\u0438\u0440\u043E\u0432\u0430\u043D\u044B."
-      <Cost>k__BackingField: 10
+      <Cost>k__BackingField: 300
       <NumberEmployees>k__BackingField: 2
-      <DurationAction>k__BackingField: 0
+      <DurationActionNValue>k__BackingField: 0
       <TypeAction>k__BackingField: 0
       <ChangeParameters>k__BackingField:
       - 60

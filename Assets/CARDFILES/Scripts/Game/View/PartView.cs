@@ -29,6 +29,7 @@ namespace Game.View
             this.company = company;
 
             company.MoneyChangedEvent += CountMoneyView;
+            company.Personnel.DistributionEmployeesEvent += PersonnelView;
             // ивенты о даннх компании и инветы хода таймера
         }
 
@@ -36,8 +37,7 @@ namespace Game.View
         {
             CountMoneyView();
             AssetsView(company.Assets[0].Name, company.Assets[1].Name);
-            PersonnelView(company.Personnel.NumberEmployedEmployees, 
-                company.Personnel.NumberAvailableEmployees + company.Personnel.NumberEmployedEmployees);
+            PersonnelView();
 
             ExpensesMoneyView();
             IncomeMoneyView();
@@ -48,6 +48,12 @@ namespace Game.View
             countMoney.text = $"{company.Money}";
         }
 
+        private void PersonnelView()
+        {
+            personnelInfo.text = $"{company.Personnel.NumberEmployedEmployees}" +
+                $"/{company.Personnel.NumberAvailableEmployees + company.Personnel.NumberEmployedEmployees}";
+        }
+
         private void ExpensesMoneyView()
         {
             expensesMoney.text = $"{company.ExpensesForPart}";
@@ -56,11 +62,6 @@ namespace Game.View
         private void IncomeMoneyView()
         {
             incomeMoney.text = $"{company.IncomeForPart}";
-        }
-
-        private void PersonnelView(int numberEmployedEmployees, int countPersonnel)
-        {
-            personnelInfo.text = $"{numberEmployedEmployees}/{countPersonnel}";
         }
 
 

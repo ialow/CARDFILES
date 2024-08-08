@@ -19,8 +19,10 @@ namespace Game.Management
 
         private readonly PartView partView;
 
+        private readonly DeckCard deckCards;
+
         public Init(FSMGameplay fsm, UserInput inputSystem, Company company, 
-            MapUserNavigations mapNavigations, MapView mapView, PartView partView)
+            MapUserNavigations mapNavigations, MapView mapView, PartView partView, DeckCard deckCards)
         {
             this.fsm = fsm;
             this.inputSystem = inputSystem;
@@ -31,6 +33,8 @@ namespace Game.Management
             this.mapView = mapView;
 
             this.partView = partView;
+
+            this.deckCards = deckCards;
         }
 
         public void Enter()
@@ -44,6 +48,7 @@ namespace Game.Management
 
         private void Load()
         {
+            deckCards.Init(company);
             partView.Init(company);
             mapView.Init();
             mapNavigations.Init(inputSystem).Active();

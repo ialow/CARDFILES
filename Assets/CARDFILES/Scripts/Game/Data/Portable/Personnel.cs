@@ -1,4 +1,7 @@
-﻿namespace Game.Data
+﻿using System;
+using System.Diagnostics;
+
+namespace Game.Data
 {
     public class Personnel
     {
@@ -8,6 +11,8 @@
         public float SatisfactionNValue { get; private set; } = 0.5f;
         public int SalaryTotalForPart { get; private set; }
 
+        public event Action DistributionEmployeesEvent;
+
         public Personnel(PersonnelData data)
         {
             NumberAvailableEmployees = data.NumberEmployees;
@@ -16,16 +21,18 @@
 
         public void MakeTask(int countRequiredEmployees)
         {
-            //
             NumberAvailableEmployees -= countRequiredEmployees;
             NumberEmployedEmployees += countRequiredEmployees;
+            
+            DistributionEmployeesEvent?.Invoke();
         }
 
         public void CompleteTask(int countReleasedEmployees)
         {
-            //
             NumberEmployedEmployees -= countReleasedEmployees;
             NumberAvailableEmployees += countReleasedEmployees;
+
+            DistributionEmployeesEvent?.Invoke();
         }
     }
 }

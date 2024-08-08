@@ -1,31 +1,66 @@
-using Game.Data;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.Editor;
+
+using Game.Data;
+using UnityEngine.UI;
 
 namespace Game.Component
 {
     public class CardAction : MonoBehaviour
     {
+        private Action<CardActionData> action;
+        private Action<CardActionData> usageCosts;
+        private Action<GameObject, CardAction> removeCard;
+
         [SerializeField] private TextMeshProUGUI nameCard;
         [SerializeField] private TextMeshProUGUI staff;
         [SerializeField] private TextMeshProUGUI cost;
 
-        public Action UsrCardAction { get; private set; }
+        [SerializeField] private GameObject inactiveCard;
+        [SerializeField] private DraggableObject draggable;
 
-        public void UIView(CardActionData data)
+        public CardActionData Data { get; private set; }
+
+        public CardAction Init(CardActionData data, 
+            Action<CardActionData> action, Action<CardActionData> usageCosts, Canvas canvas,
+            Action<GameObject, CardAction> removeCard)
         {
-            nameCard.text = $"{data.Name}";
-            staff.text = $"{data.NumberEmployees}";
-            cost.text = $"{data.Cost} k";
+            Data = data;
+
+            this.action = action;
+            this.usageCosts = usageCosts;
+            this.removeCard = removeCard;
+
+            draggable.Init(canvas);
+
+            return this;
         }
 
-        public void SetupAction(Action action)
+        public void UIView()
         {
-            UsrCardAction = action;
+            nameCard.text = $"{Data.Name}";
+            staff.text = $"{Data.NumberEmployees}";
+            cost.text = $"{Data.Cost} k";
+        }
+
+        public void UseCard()
+        {
+            removeCard?.Invoke(gameObject, this);
+            usageCosts?.Invoke(Data);
+            action?.Invoke(Data);
+        }
+
+        public void ActiveCard()
+        {
+            inactiveCard.SetActive(false);
+            draggable.Active();
+        }
+
+        public void InactiveCard()
+        {
+            draggable.Inactive();
+            inactiveCard.SetActive(true);
         }
     }
 }

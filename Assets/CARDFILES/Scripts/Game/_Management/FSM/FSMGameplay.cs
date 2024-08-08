@@ -13,7 +13,7 @@ namespace Game.Management
     public class FSMGameplay : FSMDictionary<StateGameplay>
     {
         public FSMGameplay Init(UserInput inputSystem, PartView partView, HistorySO data, 
-            MapUserNavigations mapNavigations, MapView mapView, DeckCardView cardsView)
+            MapUserNavigations mapNavigations, MapView mapView, DeckCard deckCards)
         {
             //partView
             var company = new Company(data.Company);
@@ -21,10 +21,11 @@ namespace Game.Management
 
             States = new Dictionary<StateGameplay, IFSMState<StateGameplay>>()
             {
-                [StateGameplay.Init] = new Init(this, inputSystem, company, mapNavigations, mapView, partView),
+                [StateGameplay.Init] = new Init(this, inputSystem, company, mapNavigations, 
+                mapView, partView, deckCards),
 
                 [StateGameplay.Start] = new Start(this, company, mapView, partView),
-                [StateGameplay.Part] = new Part(this, coroutines, data, company, mapView, partView, cardsView),
+                [StateGameplay.Part] = new Part(this, coroutines, data, company, mapView, partView, deckCards),
                 [StateGameplay.EndPart] = new EndPart(this, data, company, mapView),
             };
 

@@ -9,6 +9,7 @@ using Utils;
 using Game.System;
 using Game.Data;
 using Game.View;
+using Game.Component;
 
 namespace Game.Management
 {
@@ -22,10 +23,10 @@ namespace Game.Management
 
         private readonly MapView mapView;
         private readonly PartView partView;
-        private readonly DeckCardView cardsView;
+        private readonly DeckCard deckCard;
 
         public Part(FSMGameplay fsm, Coroutines coroutines, HistorySO data, Company company, 
-            MapView mapView, PartView partView, DeckCardView cardsView) 
+            MapView mapView, PartView partView, DeckCard deckCard) 
         {
             this.fsm = fsm;
             this.coroutines = coroutines;
@@ -35,37 +36,44 @@ namespace Game.Management
 
             this.mapView = mapView;
             this.partView = partView;
-            this.cardsView = cardsView;
-
-            //
+            this.deckCard = deckCard;
         }
 
         private int numberPart = 0;
+
+        private float timer;
+        private float timerNormolized;
+
         private List<(float, Action)> eventsByTime = new List<(float, Action)>();
+        private List<(float, Action)> unfinishedEvents = new List<(float, Action)>();
 
         public void Enter()
         {
+            company.MoneyChangedEvent += deckCard.IsUsingCard;
+            company.Personnel.DistributionEmployeesEvent += deckCard.IsUsingCard;
+
             AddHistoryEvent();
+            AddUnfinishedEvent();
 
             partView.NumberPartView(numberPart + 1);
             mapView.EventView(data.Events[numberPart]);
-            cardsView.CardsObj(data.Events[numberPart].CardsAction, AddActionEvent);
+            deckCard.CardsObj(data.Events[numberPart].CardsAction, AddActionEvent, CostUsingActionCard);
 
-            // метод добавления action картам
-
-            coroutines.StartCoroutine(TimerPart(/*GameSettings.TIME_PART*/5f));
+            coroutines.StartCoroutine(TimerPart(/*GameSettings.TIME_PART*/120f));
         }
 
         public void Exit()
         {
+            company.MoneyChangedEvent -= deckCard.IsUsingCard;
+            company.Personnel.DistributionEmployeesEvent -= deckCard.IsUsingCard;
+
+            //deckCard.DeleteCard();
+
             numberPart++;
         }
 
         public IEnumerator TimerPart(float durationPartInSeconds)
         {
-            var timer = 0f;
-            var timerNormolized = 0f;
-
             while (durationPartInSeconds - timer >= 1e-6)
             {
                 var currentTime = Time.time;
@@ -88,6 +96,9 @@ namespace Game.Management
 
                 eventsByTime.RemoveAll(x => eventsToRemove.Contains(x));
             }
+
+            timer = 0f;
+            timerNormolized = 0f;
 
             fsm.EnterIn<IFSMStateModified<StateGameplay>>(StateGameplay.EndPart, numberPart + 1);
         }
@@ -118,9 +129,52 @@ namespace Game.Management
             }
         }
 
-        private void AddActionEvent(string i)
+        private void AddActionEvent(CardActionData data)
         {
-            Debug.Log($"использование картый действия - {i}");
+            var typeAction = data.TypeAction;
+            var durationActionNValue = data.DurationActionNValue;
+            var parameters = data.ChangeParameters;
+
+            var possibleTimeMark = timerNormolized + durationActionNValue;
+
+            if (typeAction == TypeEvent.OnMoneyChanged)
+            {
+                if (possibleTimeMark - 1 <= 0)
+                {
+                    eventsByTime.Add((possibleTimeMark, () => {
+                        company.MoneyChanged(parameters);
+                        company.Personnel.CompleteTask(data.NumberEmployees);
+                        }
+                    ));
+                }
+                else
+                {
+                    var timeMarkNewPart = possibleTimeMark - 1;
+                    unfinishedEvents.Add((timeMarkNewPart, () => {
+                        company.MoneyChanged(parameters);
+                        company.Personnel.CompleteTask(data.NumberEmployees);
+                        }
+                    ));
+                }
+            }
+        }
+
+        private void CostUsingActionCard(CardActionData data)
+        {
+            company.MoneyChanged(new List<float>() { -data.Cost });
+            company.Personnel.MakeTask(data.NumberEmployees);
+        }
+
+        private void AddUnfinishedEvent()
+        {
+            //ТРЕБУЕТСЯ ТЕСТ!!!
+            var countEvents = unfinishedEvents.Count;
+            for (var i = 0; i < countEvents; i++)
+            {
+                eventsByTime.Add(unfinishedEvents[i]);
+            }
+
+            unfinishedEvents.Clear();
         }
     }
 }
