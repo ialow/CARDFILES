@@ -6,7 +6,6 @@ using UnityEngine;
 using Untils.FSM;
 using Utils;
 
-using Game.System;
 using Game.Data;
 using Game.View;
 using Game.Component;
@@ -49,6 +48,7 @@ namespace Game.Management
 
         public void Enter()
         {
+            Debug.Log("part");
             company.MoneyChangedEvent += deckCard.IsUsingCard;
             company.Personnel.DistributionEmployeesEvent += deckCard.IsUsingCard;
 
@@ -59,7 +59,7 @@ namespace Game.Management
             mapView.EventView(data.Events[numberPart]);
             deckCard.CardsObj(data.Events[numberPart].CardsAction, AddActionEvent, CostUsingActionCard);
 
-            coroutines.StartCoroutine(TimerPart(/*GameSettings.TIME_PART*/120f));
+            coroutines.StartCoroutine(TimerPart(/*GameSettings.TIME_PART*/10f));
         }
 
         public void Exit()

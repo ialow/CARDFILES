@@ -1,11 +1,13 @@
 using UnityEngine;
 
-using Game.Component;
 using Game.Data;
 using Game.View;
+using System;
 
 public class MapView : MonoBehaviour
 {
+    public const int RESOLUTION_PIXEL_IMAGE = 512;
+
     private float contentAreaWidth;
     private float contentAreaHeight;
 
@@ -14,9 +16,7 @@ public class MapView : MonoBehaviour
     private float objectMinPointY;
     private float objectMaxPointY;
 
-    [Space, SerializeField] private int resolutionPixelImage = 512;
     [SerializeField] private Vector4 gridChildImages = new Vector4(1, 1, 1, 1);
-
     [SerializeField] private RectTransform contentTransform;
 
     [Space, SerializeField] private RectTransform pointReference;
@@ -29,6 +29,9 @@ public class MapView : MonoBehaviour
     [Space, SerializeField] private GameObject startInfoPrefab;
     [SerializeField] private GameObject endPartPrefab;
     [SerializeField] private GameObject eventPrefab;
+    [SerializeField] private GameObject endGamePrefab;
+
+    public RectTransform CurrentPartObject { get; private set; }
 
     public void Init()
     {
@@ -37,6 +40,13 @@ public class MapView : MonoBehaviour
 
         objectMinPointY = pointReference.localPosition.y + verticalDistanceBetweenObj * contentAreaHeight;
     }
+
+    private void InstallTrackedEvent(RectTransform transformObj)
+    {
+        CurrentPartObject = transformObj;
+    }
+
+    public event Action MapExtendedEvent;
 
     private RectTransform InfoView(GameObject prefab)
     {
@@ -49,16 +59,31 @@ public class MapView : MonoBehaviour
         return transformObj;
     }
 
+    public Vector4 GetSizeMap() => 
+        new Vector4(gridChildImages.x, gridChildImages.y, gridChildImages.z, gridChildImages.w);
+
     public void StartInfoView(Company data)
     {
-        var startInfo = InfoView(startInfoPrefab).GetComponent<StartInfoView>();
-        startInfo.UIView(data);
+        var rect = InfoView(startInfoPrefab);
+        InstallTrackedEvent(rect);
+
+        rect.GetComponent<StartInfoView>().UIView(data);
     }
 
     public void EndPartInfoView(Company data)
     {
-        var partInfo = InfoView(endPartPrefab).GetComponent<PartInfoView>();
-        partInfo.UIView(data);
+        var rect = InfoView(endPartPrefab);
+        InstallTrackedEvent(rect);
+
+        rect.GetComponent<PartInfoView>().UIView(data);
+    }
+
+    public void EndGameInfoView(Company data)
+    {
+        var rect = InfoView(endGamePrefab);
+        InstallTrackedEvent(rect);
+
+        rect.GetComponent<EndGameInfoView>().UIView(data);
     }
 
     public void EventView(EventData data)
@@ -102,26 +127,26 @@ public class MapView : MonoBehaviour
         var sizeMapMaxY = gridChildImages.w;
 
         // -y
-        var availableAreaY = resolutionPixelImage * sizeMapMinY;
-        var distanceToEndMapMinY = -availableAreaY - objectMinPointY;
+        var availableAreaY = RESOLUTION_PIXEL_IMAGE * sizeMapMinY + RESOLUTION_PIXEL_IMAGE / 2;
+        var distanceToEndMapMinY = availableAreaY + objectMinPointY;
 
-        if (distanceToEndMapMinY < resolutionPixelImage)
+        if (distanceToEndMapMinY < RESOLUTION_PIXEL_IMAGE)
         {
-            var posMinY = sizeMapMinY * -resolutionPixelImage - 512;
-            var posMinX = sizeMapMinX * -resolutionPixelImage;
+            var posMinY = sizeMapMinY * -RESOLUTION_PIXEL_IMAGE - 512;
+            var posMinX = sizeMapMinX * -RESOLUTION_PIXEL_IMAGE;
 
             var sizeMapX = sizeMapMinX + sizeMapMaxX + 1;
             for (var i = 0; i < 3; i++)
             {
                 InstantiateElementGrid(posMinX, posMinY);
-                posMinX += resolutionPixelImage;
+                posMinX += RESOLUTION_PIXEL_IMAGE;
             }
 
             gridChildImages = new Vector4(sizeMapMinX, sizeMapMaxX, sizeMapMinY + 1, sizeMapMaxY);
+            MapExtendedEvent?.Invoke();
         }
 
         // -x
-
     }
 
     private void InstantiateElementGrid(float posX, float posY)

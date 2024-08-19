@@ -44,6 +44,15 @@ public partial class @CardInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FocusOnPoint"",
+                    ""type"": ""Button"",
+                    ""id"": ""59f05f81-2338-4410-b34b-6a727c93ad08"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -66,6 +75,17 @@ public partial class @CardInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard + Mouse"",
                     ""action"": ""Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""437637c8-bdfc-409c-8134-242162041cce"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""FocusOnPoint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -95,6 +115,7 @@ public partial class @CardInput: IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Mouse = m_Gameplay.FindAction("Mouse", throwIfNotFound: true);
         m_Gameplay_Wheel = m_Gameplay.FindAction("Wheel", throwIfNotFound: true);
+        m_Gameplay_FocusOnPoint = m_Gameplay.FindAction("FocusOnPoint", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -158,12 +179,14 @@ public partial class @CardInput: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Mouse;
     private readonly InputAction m_Gameplay_Wheel;
+    private readonly InputAction m_Gameplay_FocusOnPoint;
     public struct GameplayActions
     {
         private @CardInput m_Wrapper;
         public GameplayActions(@CardInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Mouse => m_Wrapper.m_Gameplay_Mouse;
         public InputAction @Wheel => m_Wrapper.m_Gameplay_Wheel;
+        public InputAction @FocusOnPoint => m_Wrapper.m_Gameplay_FocusOnPoint;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -179,6 +202,9 @@ public partial class @CardInput: IInputActionCollection2, IDisposable
             @Wheel.started += instance.OnWheel;
             @Wheel.performed += instance.OnWheel;
             @Wheel.canceled += instance.OnWheel;
+            @FocusOnPoint.started += instance.OnFocusOnPoint;
+            @FocusOnPoint.performed += instance.OnFocusOnPoint;
+            @FocusOnPoint.canceled += instance.OnFocusOnPoint;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -189,6 +215,9 @@ public partial class @CardInput: IInputActionCollection2, IDisposable
             @Wheel.started -= instance.OnWheel;
             @Wheel.performed -= instance.OnWheel;
             @Wheel.canceled -= instance.OnWheel;
+            @FocusOnPoint.started -= instance.OnFocusOnPoint;
+            @FocusOnPoint.performed -= instance.OnFocusOnPoint;
+            @FocusOnPoint.canceled -= instance.OnFocusOnPoint;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -219,5 +248,6 @@ public partial class @CardInput: IInputActionCollection2, IDisposable
     {
         void OnMouse(InputAction.CallbackContext context);
         void OnWheel(InputAction.CallbackContext context);
+        void OnFocusOnPoint(InputAction.CallbackContext context);
     }
 }

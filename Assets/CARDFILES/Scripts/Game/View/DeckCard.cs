@@ -28,6 +28,8 @@ namespace Game.Component
 
         public void CardsObj(List<CardActionData> data, Action<CardActionData> action, Action<CardActionData> costUsingCardAction)
         {
+            DeleteCard();
+
             for (int i = 0; i < COUNT_CARDS; i++)
             {
                 if (numberPrefabs == 0)
@@ -107,6 +109,14 @@ namespace Game.Component
             }
         }
 
+        public void Deinit()
+        {
+            for (var i = 0; i < cardActions.Count; i++)
+            {
+                cardActions[i].Item2.InactiveCard();
+            }
+        }
+
         private void DeleteCardInListAction(GameObject card, CardAction cardAction)
         {
             cardActions.Remove((card, cardAction));
@@ -117,7 +127,7 @@ namespace Game.Component
             for (var i = 0; i < cardHolder.Count; i++)
             {
                 if (cardHolder[i].transform.childCount > 0)
-                    Destroy(cardHolder[i].transform.GetChild(0));
+                    Destroy(cardHolder[i].transform.GetChild(0).gameObject);
             }
 
             cardActions.Clear();

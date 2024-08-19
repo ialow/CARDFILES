@@ -51,7 +51,7 @@ namespace Game.Management
             deckCards.Init(company);
             partView.Init(company);
             mapView.Init();
-            mapNavigations.Init(inputSystem).Active();
+            mapNavigations.Init(inputSystem, mapView).Active();
             inputSystem.OnGameplay();
         }
     }

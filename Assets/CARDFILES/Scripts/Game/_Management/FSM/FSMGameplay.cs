@@ -26,7 +26,7 @@ namespace Game.Management
 
                 [StateGameplay.Start] = new Start(this, company, mapView, partView),
                 [StateGameplay.Part] = new Part(this, coroutines, data, company, mapView, partView, deckCards),
-                [StateGameplay.EndPart] = new EndPart(this, data, company, mapView),
+                [StateGameplay.EndPart] = new EndPart(this, data, company, mapView, deckCards),
             };
 
             return this;

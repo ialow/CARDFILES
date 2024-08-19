@@ -22,6 +22,7 @@ namespace Game.System
 
         //public event Action<float> ScaleEvent;
         public event Action<Vector2, Vector2> OffsetMouseEvent;
+        public event Action FocusOnPointEvent;
 
         public void OnGameplay()
         {
@@ -59,6 +60,12 @@ namespace Game.System
             //if (context.phase == InputActionPhase.Performed)
             //    Debug.Log(context.ReadValue<float>());
             //ScaleEvent?.Invoke(context.ReadValue<float>());
+        }
+
+        public void OnFocusOnPoint(InputAction.CallbackContext context)
+        {
+            if (context.phase == InputActionPhase.Performed)
+                FocusOnPointEvent?.Invoke();
         }
     }
 }

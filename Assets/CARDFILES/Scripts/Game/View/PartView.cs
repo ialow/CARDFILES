@@ -46,6 +46,9 @@ namespace Game.View
         private void CountMoneyView()
         {
             countMoney.text = $"{company.Money}";
+
+            //ExpensesMoneyView();
+            //IncomeMoneyView();
         }
 
         private void PersonnelView()

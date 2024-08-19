@@ -72,6 +72,10 @@ namespace Game.Data
         public void MoneyChanged(List<float> addingMoney)
         {
             Money += (int)Math.Round(addingMoney[0]);
+
+            //CalculationIncomeForPart();
+            //CalculationExpensesForPart();
+
             MoneyChangedEvent?.Invoke();
         }
 
@@ -91,8 +95,8 @@ namespace Game.Data
 
         public void ReportFinancial()
         {
-            Money += IncomeForPart;
-            Money -= ExpensesForPart;
+            //Money += IncomeForPart;
+            //Money -= ExpensesForPart;
 
             if (Loan != null)
                 Loan.MakePayment();
