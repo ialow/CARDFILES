@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Untils.FSM
+namespace Untils
 {
     public abstract class FSMDictionary<TEnum> : IFSM<TEnum, Dictionary<TEnum, IFSMState<TEnum>>> where TEnum : Enum
     {

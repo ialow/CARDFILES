@@ -1,6 +1,6 @@
 using System;
 
-namespace Untils.FSM
+namespace Untils
 {
     public interface IFSM<TEnum, TStates> where TEnum : Enum 
     {

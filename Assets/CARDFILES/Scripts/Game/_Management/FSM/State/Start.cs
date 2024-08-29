@@ -1,33 +1,30 @@
-﻿using Untils.FSM;
+﻿using Untils;
 
-using Game.Data;
-using Game.View;
+using Game.System;
+using Game.Controller;
 
 namespace Game.Management
 {
     public class Start : IFSMState<StateGameplay>
     {
-        private readonly FSMGameplay fsm;
+        private readonly UserInputSystem inputSystem;
 
-        private readonly Company company;
+        private readonly MapController mapController;
+        private readonly InventoryController inventoryController;
 
-        private readonly MapView mapView;
-        private readonly PartView partView;
-
-        public Start(FSMGameplay fsm, Company company, MapView mapView, PartView partView)
+        public Start(UserInputSystem inputSystem, MapController mapController, InventoryController inventoryController)
         {
-            this.fsm = fsm;
-            this.company = company;
+            this.inputSystem = inputSystem;
 
-            this.mapView = mapView;
-            this.partView = partView;
+            this.mapController = mapController;
+            this.inventoryController = inventoryController;
         }
 
         public void Enter()
         {
-            partView.StartInfoView();
-            mapView.StartInfoView(company);
-            fsm.EnterIn(StateGameplay.Part);
+            mapController.Active();
+            
+            inputSystem.OnGameplay();
         }
 
         public void Exit()

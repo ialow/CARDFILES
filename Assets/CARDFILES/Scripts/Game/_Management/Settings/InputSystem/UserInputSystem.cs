@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 namespace Game.System
 {
     [CreateAssetMenu(menuName = "Scriptable object/Input")]
-    public class UserInput : ScriptableObject, CardInput.IGameplayActions
+    public class UserInputSystem : ScriptableObject, CardInput.IGameplayActions
     {
         private CardInput userInput;
 
