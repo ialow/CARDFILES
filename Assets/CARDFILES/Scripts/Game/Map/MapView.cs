@@ -18,14 +18,24 @@ namespace Game.View
 
         [Space, SerializeField] private GameObject startInfoHistoryPrefab;
         [SerializeField] private GameObject eventPrefab;
-        [SerializeField] private GameObject launchingEraPrefab;
-        [SerializeField] private GameObject endEraPrefab;
+        //[SerializeField] private GameObject launchingEraPrefab;
+        //[SerializeField] private GameObject endEraPrefab;
 
         public void Init(Map map)
         {
             this.map = map;
 
             ExpansionMapView();
+        }
+
+        public void Action()
+        {
+            map.ExpansionBottomMapEvent += ExpansionMapView;
+        }
+
+        public void Inaction()
+        {
+            map.ExpansionBottomMapEvent -= ExpansionMapView;
         }
 
         private void ExpansionMapView()
@@ -50,10 +60,10 @@ namespace Game.View
             //{
 
             //}
-            if (gridView.w < gridMap.w)
+            for(; gridView.w < gridMap.w;)
             {
-                var posMinY = countChunkBottomMap * -Map.MAP_CHUNCK_SIZE * 2;
-                var posMinX = countChunkTopMap * -Map.MAP_CHUNCK_SIZE;
+                var posMinY = gridView.w * -Map.MAP_CHUNCK_SIZE - Map.MAP_CHUNCK_SIZE;
+                var posMinX = countChunkLeftMap * -Map.MAP_CHUNCK_SIZE;
 
                 var sizeMapX = countChunkRightMap + countChunkLeftMap + 1;
                 for (var i = 0; i < sizeMapX; i++)
@@ -61,6 +71,8 @@ namespace Game.View
                     InstantiateElementGrid(posMinX, posMinY);
                     posMinX += Map.MAP_CHUNCK_SIZE;
                 }
+
+                gridView = new Vector4(gridView.x, gridView.y, gridView.z, gridView.w + 1);
             }
         }
 

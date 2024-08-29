@@ -36,6 +36,7 @@ namespace Game.Controller
 
         public MapController Active()
         {
+            mapView.Action();
             mapNavigations.Active();
             return this;
         }
